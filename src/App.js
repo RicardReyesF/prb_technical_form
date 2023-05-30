@@ -1,25 +1,115 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import validationN from './validation';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+const App = () => {
+
+    const arr = ['soltero', 'casado','union libre'];
+    const [form,setForm] = useState({
+        nombre:"",
+        apellido:"",
+        edad: "",
+        nacionalidad:"",
+        estatus: ""
+
+    })
+    const [validation,setValidation] = useState({
+        nombre:"",
+        apellido:"",
+        edad: "",
+    })
+
+    function onChange(e){
+        setValidation(
+            validationN({
+                ...form,
+                [e.target.name]: e.target.value
+            })
+        )
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+            
+        })        
+    }
+
+    function onCheck(e){
+        setForm({
+            ...form,
+            estatus: [...form.estatus,e.target.value][0]
+            
+        })
+    }
+
+    console.log(form);
+
+
+    
+
+    return(
+        <div style={{ direction:"column", alignItems:"center" }}>
+            <form>
+                <label>Nombre</label>
+                <input 
+                    type="text" 
+                    name='nombre'
+                    onChange={onChange}
+                    >
+                </input>
+                <p style={{ color: "red" }}>{validation.nombre && validation.nombre}</p>
+
+                <label>Apellido</label>
+                <input 
+                    type="text" 
+                    name='apellido'
+                    onChange={onChange}
+                    >
+                    
+                </input>
+
+                <label>Edad</label>
+                <input 
+                    type="number" 
+                    name='edad'
+                    onChange={onChange}
+                    >
+                    
+                </input>
+
+                <label>Pais</label>
+                <select name='nacionalidad' onChange={onChange}>
+                    <option value="mex"> Mexicana</option>
+                    <option value="esp"> Española </option>
+                    <option value="eua"> Estados Unidos </option>
+                    <option value="ita"> Italia </option>
+                </select>
+                
+                <label>Estatus</label>
+                <div>
+                    {
+                        arr.map( arr => {
+                            return(
+                                <label>
+                                    {arr}
+                                    <input 
+                                        type="checkbox" 
+                                        value={arr}
+                                        onChange={onCheck}
+                                    />
+                                </label>
+                                    
+                            )
+                        })
+                    
+                    }
+                    
+                </div>
+                <button>Enviar</button>
+            </form>
+        </div>
+    )
 }
+
 
 export default App;
